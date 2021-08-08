@@ -35,15 +35,19 @@ func encodeURI(s string) (string, error) {
 	return v, nil
 }
 
-func Translate(source, sourceLang, targetLang string) (string, error) {
+func Translate(source, sourceLang, targetLang string, client string) (string, error) {
 	var text []string
 	var result []interface{}
+	
+	if client == "" {
+		client = "gtx"
+	}
 
 	encodedSource, err := encodeURI(source)
 	if err != nil {
 		return "err", err
 	}
-	url := "https://translate.googleapis.com/translate_a/single?client=gtx&sl=" +
+	url := "https://translate.googleapis.com/translate_a/single?client="+client+"&sl=" +
 		sourceLang + "&tl=" + targetLang + "&dt=t&q=" + encodedSource
 
 	r, err := http.Get(url)
